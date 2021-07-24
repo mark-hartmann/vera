@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// todo: find a way to test this properly
 func TestInstalled(t *testing.T) {
 	version, ok := Installed()
 
