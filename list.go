@@ -1,9 +1,6 @@
 package vera
 
 import (
-	"bytes"
-	"errors"
-	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
@@ -16,19 +13,14 @@ type MountProperties struct {
 	MountPoint string
 }
 
-func List() ([]MountProperties, error) {
-	cmd := exec.Command("veracrypt", "-t", "-l")
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-
+func List() []MountProperties {
+	cmd, stdout, _ := newCommand("-t", "-l")
 	if err := cmd.Run(); err != nil {
 		// parse error from stderr and return this instead of the err itself, which is "exit status 1"
-		return []MountProperties{}, errors.New(stderr.String())
+		return make([]MountProperties, 0)
 	}
 
-	return parseListOutput(stdout.String()), nil
+	return parseListOutput(stdout.String())
 }
 
 // parseListOutput takes the content of the commands stdOut and parses it
