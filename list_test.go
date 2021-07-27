@@ -7,8 +7,10 @@ import (
 
 // todo: write more tests once the Mount function is written
 func TestListReturnsEmptyMapIfNoMount(t *testing.T) {
-	mounts := List()
+	mounts, err := List()
 
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrNoVolumesMounted)
 	assert.NotNil(t, mounts)
 	assert.Empty(t, mounts)
 }

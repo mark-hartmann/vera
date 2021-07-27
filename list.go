@@ -1,6 +1,7 @@
 package vera
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -13,14 +14,18 @@ type MountProperties struct {
 	MountPoint string
 }
 
-func List() []MountProperties {
-	cmd, stdout, _ := newCommand("-t", "-l")
+var ErrNoVolumesMounted = errors.New("no volumes mounted")
+
+// List returns a list of all mounted volumes. If no value is mounted a empty list is returned, as well
+// as a ErrNoVolumesMounted error
+func List() ([]MountProperties, error) {
+	cmd, stdout, _ := newCommand("-l")
 	if err := cmd.Run(); err != nil {
 		// parse error from stderr and return this instead of the err itself, which is "exit status 1"
-		return make([]MountProperties, 0)
+		return make([]MountProperties, 0), ErrNoVolumesMounted
 	}
 
-	return parseListOutput(stdout.String())
+	return parseListOutput(stdout.String()), nil
 }
 
 // parseListOutput takes the content of the commands stdOut and parses it
