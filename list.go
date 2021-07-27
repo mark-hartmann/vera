@@ -1,7 +1,6 @@
 package vera
 
 import (
-	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -13,8 +12,6 @@ type MountProperties struct {
 	Container  string
 	MountPoint string
 }
-
-var ErrNoVolumesMounted = errors.New("no volumes mounted")
 
 // List returns a list of all mounted volumes. If no value is mounted a empty list is returned, as well
 // as a ErrNoVolumesMounted error
