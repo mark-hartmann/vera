@@ -20,7 +20,7 @@ func Installed() (string, bool) {
 	return strings.Trim(stdout.String(), "\n"), true
 }
 
-// newCommand returns a "pre configured" exec.Cmd plus the stdout and stderr buffers
+// newCommand returns a "pre-configured" exec.Cmd plus the stdout and stderr buffers
 // used to intercept command line errors and output
 func newCommand(args ...string) (cmd *exec.Cmd, stdout, stderr *bytes.Buffer) {
 	args = append([]string{"-t", "--non-interactive"}, args...)

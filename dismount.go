@@ -1,7 +1,5 @@
 package vera
 
-import "errors"
-
 // DismountAll dismounts all mounted volumes
 func DismountAll() error {
 	cmd, _, _ := newCommand("-d")
@@ -16,7 +14,7 @@ func DismountAll() error {
 // mounted volumes, use DismountAll
 func DismountVolume(path string) error {
 	if len(path) == 0 {
-		return errors.New("no volume path provided")
+		return ErrNoVolumePath
 	}
 	cmd, _, _ := newCommand("-d", path)
 	if err := cmd.Run(); err != nil {
