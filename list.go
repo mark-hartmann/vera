@@ -16,9 +16,9 @@ type MountProperties struct {
 // List returns a list of all mounted volumes. If no value is mounted a empty list is returned, as well
 // as a ErrNoVolumesMounted error
 func List() ([]MountProperties, error) {
-	cmd, stdout, _ := newCommand("-l")
+	cmd, stdout, _ := newCommand(list)
 	if err := cmd.Run(); err != nil {
-		// parse error from stderr and return this instead of the err itself, which is "exit status 1"
+		// parse error from stderr and return this instead of the error itself, which is "exit status 1"
 		return make([]MountProperties, 0), ErrNoVolumesMounted
 	}
 
