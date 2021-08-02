@@ -1,6 +1,6 @@
 ### Vera
 
-Allows applications to easily work with encrypted containers using the VeraCrypt cli
+Allows applications to easily mount encrypted containers using the VeraCrypt cli
 
 #### Note
 
