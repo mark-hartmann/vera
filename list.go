@@ -26,7 +26,7 @@ func List() ([]MountProperties, error) {
 }
 
 // PropertiesSlot returns a MountProperties struct for the container mounted in the given slot. This function will
-// return an error if the slot is empty of out of bounds (max 64)
+// return an error if the slot is empty or out of bounds (max 64)
 func PropertiesSlot(slot uint8) (MountProperties, error) {
 	if slot < 1 || slot > 64 {
 		return MountProperties{}, ErrParameterIncorrect
