@@ -21,15 +21,26 @@ func (suite *MountTestSuite) AfterTest(suiteName, testName string) {
 	dismountAll()
 }
 
+func (suite MountTestSuite) TestSlotOutOfBoundsErrParameterIncorrect() {
+	emptyProps := MountProperties{}
+
+	// there is no slot 0
+	props, err := Mount("./testdata/basic.vc", 0, Param{Name: "password", Value: "123456789"})
+	suite.Equal(emptyProps, props)
+	suite.ErrorIs(err, ErrParameterIncorrect)
+
+	// VeraCrypt only supports 64 slots
+	_, err = Mount("./testdata/basic.vc", 65, Param{Name: "password", Value: "123456789"})
+	suite.Equal(emptyProps, props)
+	suite.ErrorIs(err, ErrParameterIncorrect)
+}
+
 func (suite *MountTestSuite) TestBasicContainerMount() {
-	_, err := Mount("./testdata/basic.vc", 2, Param{Name: "password", Value: "123456789"})
-	suite.NoError(err)
-
-	props, err := List()
+	props, err := Mount("./testdata/basic.vc", 2, Param{Name: "password", Value: "123456789"})
 
 	suite.NoError(err)
-	suite.NotEmpty(props)
-	suite.Len(props, 1)
+	suite.NotEqual(MountProperties{}, props)
+	suite.Equal(uint8(2), props.Slot)
 }
 
 // dismountAll dismounts all currently mounted volumes
