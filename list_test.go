@@ -1,44 +1,100 @@
 package vera
 
 import (
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"path"
 	"testing"
 )
 
-// todo: write more tests once the Mount function is written
-func TestListReturnsEmptyMapIfNoMount(t *testing.T) {
+type ListTestSuite struct {
+	suite.Suite
+}
+
+func TestListTestSuite(t *testing.T) {
+	suite.Run(t, new(ListTestSuite))
+}
+
+// dismount all mounted volumes
+func (suite *ListTestSuite) BeforeTest(_, _ string) {
+	dismountAll()
+}
+
+// dismount all mounted volumes
+func (suite *ListTestSuite) AfterTest(_, _ string) {
+	dismountAll()
+}
+
+// make sure list returns an empty array even if VeraCrypt returns an ErrNoVolumesMounted error. If no volumes are
+// mounted, the returned error must be of type ErrNoVolumesMounted
+func (suite ListTestSuite) TestListReturnsEmptySliceIfNoMount() {
 	mounts, err := List()
 
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrNoVolumesMounted)
-	assert.NotNil(t, mounts)
-	assert.Empty(t, mounts)
+	suite.Error(err)
+	suite.ErrorIs(err, ErrNoVolumesMounted)
+	suite.NotNil(mounts)
+	suite.Empty(mounts)
 }
 
-func TestPropertiesSlotErrNoSuchVolumeMounted(t *testing.T) {
+// make sure ErrNoSuchVolumeMounted is returned of no volumes are mounted
+func (suite ListTestSuite) TestPropertiesSlotErrNoSuchVolumeMounted() {
 	_, err := PropertiesSlot(1)
-	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
+
 	_, err = PropertiesSlot(64)
-	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
 }
 
-func TestPropertiesSlotDoesNotAcceptValuesBelowOne(t *testing.T) {
+// make sure ErrParameterIncorrect is returned if the slot number is less than one. The VeraCrypt slot range starts
+// at one
+func (suite ListTestSuite) TestPropertiesSlotDoesNotAcceptValuesBelowOne() {
 	_, err := PropertiesSlot(0)
-	assert.ErrorIs(t, err, ErrParameterIncorrect)
+	suite.ErrorIs(err, ErrParameterIncorrect)
 }
 
-func TestPropertiesSlotSlotOutOfBoundsErrParameterIncorrect(t *testing.T) {
+// make sure that the VeraCrypt slot range is well respected. If no volumes are mounted and we try to retrieve the
+// properties of slot one, ErrNoSuchVolumeMounted must be returned. If the slot is 65 and out of range, we
+// expect ErrParameterIncorrect
+func (suite ListTestSuite) TestPropertiesSlotSlotOutOfBoundsErrParameterIncorrect() {
 	// slot 64 is not out of bounds, so we expect an ErrNoSuchVolumeMounted error
 	_, err := PropertiesSlot(64)
-	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
+
 	// VeraCrypt does not support more than 64 mounted containers
 	_, err = PropertiesSlot(65)
-	assert.ErrorIs(t, err, ErrParameterIncorrect)
+	suite.ErrorIs(err, ErrParameterIncorrect)
 }
 
-func TestPropertiesVolumeErrNoSuchVolumeMounted(t *testing.T) {
-	_, err := PropertiesVolume("./testdata/basic.vc")
-	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
-	_, err = PropertiesVolume("./testdata/basic.vc")
-	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+// check if we get the correct errors while calling the PropertiesVolume func
+func (suite ListTestSuite) TestPropertiesVolumeErrNoSuchVolumeMounted() {
+	const volume = "./testdata/basic.vc"
+	_, err := PropertiesVolume(volume)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
+	_, err = PropertiesVolume(volume)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
+}
+
+// check if the PropertiesSlot func returns a slice with a single MountProperties struct that matches the
+// mounted volume
+func (suite ListTestSuite) TestPropertiesSlotReturnsCorrectMountProperties() {
+	const volume = "./testdata/basic.vc"
+	mountProps, err := Mount(volume, 1, Param{Name: "p", Value: "123456789"})
+	suite.NoError(err)
+
+	props, err := PropertiesSlot(1)
+	suite.NoError(err)
+	suite.Equal(mountProps, props)
+	// use path.Clean(volume) to remove the relative dot
+	suite.Contains(props.Container, path.Clean(volume))
+}
+
+func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
+	const volume = "./testdata/basic.vc"
+	mountProps, err := Mount(volume, 1, Param{Name: "p", Value: "123456789"})
+	suite.NoError(err)
+
+	props, err := PropertiesVolume(volume)
+	suite.NoError(err)
+	suite.Equal(mountProps, props)
+	// use path.Clean(volume) to remove the relative dot
+	suite.Contains(props.Container, path.Clean(volume))
 }
