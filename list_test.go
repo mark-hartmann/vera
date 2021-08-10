@@ -35,3 +35,10 @@ func TestPropertiesSlotSlotOutOfBoundsErrParameterIncorrect(t *testing.T) {
 	_, err = PropertiesSlot(65)
 	assert.ErrorIs(t, err, ErrParameterIncorrect)
 }
+
+func TestPropertiesVolumeErrNoSuchVolumeMounted(t *testing.T) {
+	_, err := PropertiesVolume("./testdata/basic.vc")
+	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+	_, err = PropertiesVolume("./testdata/basic.vc")
+	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+}

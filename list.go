@@ -43,6 +43,19 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 	return parseListOutput(stdout.String())[0], nil
 }
 
+// PropertiesVolume returns a MountProperties struct for the container mounted in the given slot. This function will
+// return an error if the slot is empty or out of bounds (max 64)
+func PropertiesVolume(volume string) (MountProperties, error) {
+	cmd, stdout, _ := newCommand(list, Param{Value: volume})
+	if err := cmd.Run(); err != nil {
+		// --list does not require su privileges, so we can simply return ErrNoSuchVolumeMounted
+		return MountProperties{}, ErrNoSuchVolumeMounted
+	}
+
+	// parse the stdout, because we used the slot flag, only one entry is returned
+	return parseListOutput(stdout.String())[0], nil
+}
+
 // parseListOutput takes the content of the commands stdOut and parses it
 func parseListOutput(s string) []MountProperties {
 	regex := regexp.MustCompile(`(?m)^(?P<slot>\d): (?P<container>.*) (?P<vDevice>.*) (?P<mount>.*)$`)
