@@ -51,7 +51,7 @@ func (suite ListTestSuite) TestPropertiesSlotDoesNotAcceptValuesBelowOne() {
 	suite.ErrorIs(err, ErrParameterIncorrect)
 }
 
-// make sure that the VeraCrypt slot range is well respected. If no volumes are mounted and we try to retrieve the
+// make sure that the VeraCrypt slot range is well respected. If no volumes are mounted, and we try to retrieve the
 // properties of slot one, ErrNoSuchVolumeMounted must be returned. If the slot is 65 and out of range, we
 // expect ErrParameterIncorrect
 func (suite ListTestSuite) TestPropertiesSlotSlotOutOfBoundsErrParameterIncorrect() {
@@ -64,7 +64,7 @@ func (suite ListTestSuite) TestPropertiesSlotSlotOutOfBoundsErrParameterIncorrec
 	suite.ErrorIs(err, ErrParameterIncorrect)
 }
 
-// check if we get the correct errors while calling the PropertiesVolume func
+// check if we get the correct errors while calling the PropertiesVolume func without any mounted volumes
 func (suite ListTestSuite) TestPropertiesVolumeErrNoSuchVolumeMounted() {
 	const volume = "./testdata/basic.vc"
 	_, err := PropertiesVolume(volume)
@@ -73,8 +73,7 @@ func (suite ListTestSuite) TestPropertiesVolumeErrNoSuchVolumeMounted() {
 	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
 }
 
-// check if the PropertiesSlot func returns a slice with a single MountProperties struct that matches the
-// mounted volume
+// check if the PropertiesSlot func returns a MountProperties struct that matches the mounted volume
 func (suite ListTestSuite) TestPropertiesSlotReturnsCorrectMountProperties() {
 	const volume = "./testdata/basic.vc"
 	mountProps, err := Mount(volume, 1, Param{Name: "p", Value: "123456789"})
@@ -87,6 +86,7 @@ func (suite ListTestSuite) TestPropertiesSlotReturnsCorrectMountProperties() {
 	suite.Contains(props.Container, path.Clean(volume))
 }
 
+// check if the PropertiesVolume func returns a MountProperties struct that matches the mounted volume
 func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
 	const volume = "./testdata/basic.vc"
 	mountProps, err := Mount(volume, 1, Param{Name: "p", Value: "123456789"})
@@ -97,4 +97,15 @@ func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
 	suite.Equal(mountProps, props)
 	// use path.Clean(volume) to remove the relative dot
 	suite.Contains(props.Container, path.Clean(volume))
+}
+
+// make sure both PropertiesSlot and PropertiesVolume are returning the same data
+func (suite ListTestSuite) TestPropertiesVolumeAndPropertiesSlotReturnTheSameData() {
+	const volume = "./testdata/basic.vc"
+	_, err := Mount(volume, 1, Param{Name: "p", Value: "123456789"})
+	suite.NoError(err)
+
+	propsSlot, _ := PropertiesSlot(1)
+	propsVolume, _ := PropertiesVolume(path.Clean(volume))
+	suite.Equal(propsSlot, propsVolume)
 }
