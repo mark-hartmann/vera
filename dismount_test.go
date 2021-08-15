@@ -21,3 +21,13 @@ func TestDismountVolumeReturnErrorIfUnknownVolume(t *testing.T) {
 	assert.Error(t, err)
 	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
 }
+
+func TestDismountSlotReturnsErrParameterIncorrectIfInvalidSlot(t *testing.T) {
+	err := DismountSlot(0)
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrParameterIncorrect)
+
+	err = DismountSlot(65)
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrParameterIncorrect)
+}
