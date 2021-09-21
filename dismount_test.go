@@ -48,3 +48,36 @@ func (suite *DismountTestSuite) TestDismountSlotReturnsErrParameterIncorrectIfIn
 	suite.Error(err)
 	suite.ErrorIs(err, ErrParameterIncorrect)
 }
+
+func (suite *DismountTestSuite) TestDismountSlotReturnsNoErrMountedVolumeDismounted() {
+	_, err := Mount("./testdata/basic.vc", 1, Param{Name: "password", Value: "123456789"})
+	suite.NoError(err)
+
+	err = DismountSlot(1)
+	suite.NoError(err)
+}
+
+func (suite *DismountTestSuite) TestDismountVolumeReturnsNoErrMountedVolumeDismounted() {
+	_, err := Mount("./testdata/basic.vc", 1, Param{Name: "password", Value: "123456789"})
+	suite.NoError(err)
+
+	err = DismountVolume("./testdata/basic.vc")
+	suite.NoError(err)
+}
+
+func (suite *DismountTestSuite) TestDismountVolumeReturnsErrMountedVolumeDismountedJustName() {
+	_, err := Mount("./testdata/basic.vc", 1, Param{Name: "password", Value: "123456789"})
+	suite.NoError(err)
+
+	err = DismountVolume("basic.vc")
+	suite.NoError(err)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
+}
+
+func (suite *DismountTestSuite) TestDismountAllReturnsNoErrMountedVolumeDismounted() {
+	_, err := Mount("./testdata/basic.vc", 1, Param{Name: "password", Value: "123456789"})
+	suite.NoError(err)
+
+	err = DismountAll()
+	suite.NoError(err)
+}
