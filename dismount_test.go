@@ -65,12 +65,12 @@ func (suite *DismountTestSuite) TestDismountVolumeReturnsNoErrMountedVolumeDismo
 	suite.NoError(err)
 }
 
-func (suite *DismountTestSuite) TestDismountVolumeReturnsErrMountedVolumeDismountedJustName() {
+func (suite *DismountTestSuite) TestDismountVolumeReturnsErrMountedVolumeDismountedOnlyName() {
 	_, err := Mount("./testdata/basic.vc", 1, Param{Name: "password", Value: "123456789"})
 	suite.NoError(err)
 
 	err = DismountVolume("basic.vc")
-	suite.NoError(err)
+	suite.Error(err)
 	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
 }
 
