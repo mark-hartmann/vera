@@ -43,6 +43,14 @@ func (suite *MountTestSuite) TestBasicContainerMount() {
 	suite.Equal(uint8(2), props.Slot)
 }
 
+func (suite *MountTestSuite) TestBasicContainerMountComplexPassword() {
+	props, err := Mount("./testdata/basic-complex-pw.vc", 2, Param{Name: "password", Value: `s8&"f^T$r'`})
+
+	suite.NoError(err)
+	suite.NotEqual(MountProperties{}, props)
+	suite.Equal(uint8(2), props.Slot)
+}
+
 // dismountAll dismounts all currently mounted volumes
 func dismountAll() {
 	DismountAll()
