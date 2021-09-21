@@ -1,33 +1,50 @@
 package vera
 
 import (
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 	"testing"
 )
 
-func TestDismountAllDoesNotReturnErrorIfNoVolume(t *testing.T) {
+type DismountTestSuite struct {
+	suite.Suite
+}
+
+func TestDismountTestSuite(t *testing.T) {
+	suite.Run(t, new(DismountTestSuite))
+}
+
+func (suite *DismountTestSuite) BeforeTest(_, _ string) {
+	dismountAll()
+}
+
+func (suite *DismountTestSuite) AfterTest(_, _ string) {
+	dismountAll()
+}
+
+// make sure no error is returned if no volume is mounted
+func (suite *DismountTestSuite) TestDismountAllDoesNotReturnErrorIfNoVolume() {
 	err := DismountAll()
-	assert.NoError(t, err)
+	suite.NoError(err)
 }
 
-func TestDismountVolumeReturnErrorIfEmptyString(t *testing.T) {
+func (suite *DismountTestSuite) TestDismountVolumeReturnErrorIfEmptyString() {
 	err := DismountVolume("")
-	assert.Error(t, err)
-	assert.Equal(t, "no volume path provided", err.Error())
+	suite.Error(err)
+	suite.Equal("no volume path provided", err.Error())
 }
 
-func TestDismountVolumeReturnErrorIfUnknownVolume(t *testing.T) {
+func (suite *DismountTestSuite) TestDismountVolumeReturnErrorIfUnknownVolume() {
 	err := DismountVolume("test.container")
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrNoSuchVolumeMounted)
+	suite.Error(err)
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
 }
 
-func TestDismountSlotReturnsErrParameterIncorrectIfInvalidSlot(t *testing.T) {
+func (suite *DismountTestSuite) TestDismountSlotReturnsErrParameterIncorrectIfInvalidSlot() {
 	err := DismountSlot(0)
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrParameterIncorrect)
+	suite.Error(err)
+	suite.ErrorIs(err, ErrParameterIncorrect)
 
 	err = DismountSlot(65)
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, ErrParameterIncorrect)
+	suite.Error(err)
+	suite.ErrorIs(err, ErrParameterIncorrect)
 }
