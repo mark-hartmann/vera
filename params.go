@@ -2,7 +2,7 @@ package vera
 
 import "fmt"
 
-// TrueCrypt tells VeraCrypt to mount the given volume or container in TrueCrypt mode for backward compatability
+// TrueCrypt tells VeraCrypt to mount the given volume in TrueCrypt mode for backward compatability
 var TrueCrypt = Param{Name: "truecrypt", IsFlag: true}
 
 // nonInteractive represents the "--non-interactive" flag. This is only for internal use, as direct communication is not
@@ -15,10 +15,10 @@ var textOnly = Param{Name: "t", IsFlag: true}
 // version is used to return the version of the currently installed VeraCrypt
 var version = Param{Name: "version", IsFlag: true}
 
-// dismount is used to unmount one or all mounted containers / volumes
+// dismount is used to unmount one or all mounted volumes
 var dismount = Param{Name: "dismount", IsFlag: true}
 
-// list is used to return a list of all currently mounted containers / volumes
+// list is used to return a list of all currently mounted volumes
 var list = Param{Name: "list", IsFlag: true}
 
 // arg returns a configured Param instance to use as argument

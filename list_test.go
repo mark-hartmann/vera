@@ -59,7 +59,7 @@ func (suite ListTestSuite) TestPropertiesSlotSlotOutOfBoundsErrParameterIncorrec
 	_, err := PropertiesSlot(64)
 	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
 
-	// VeraCrypt does not support more than 64 mounted containers
+	// VeraCrypt does not support more than 64 mounted volumes
 	_, err = PropertiesSlot(65)
 	suite.ErrorIs(err, ErrParameterIncorrect)
 }
@@ -83,7 +83,7 @@ func (suite ListTestSuite) TestPropertiesSlotReturnsCorrectMountProperties() {
 	suite.NoError(err)
 	suite.Equal(mountProps, props)
 	// use path.Clean(volume) to remove the relative dot
-	suite.Contains(props.Container, path.Clean(volume))
+	suite.Contains(props.Volume, path.Clean(volume))
 }
 
 // check if the PropertiesVolume func returns a MountProperties struct that matches the mounted volume
@@ -96,7 +96,7 @@ func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
 	suite.NoError(err)
 	suite.Equal(mountProps, props)
 	// use path.Clean(volume) to remove the relative dot
-	suite.Contains(props.Container, path.Clean(volume))
+	suite.Contains(props.Volume, path.Clean(volume))
 }
 
 // make sure both PropertiesSlot and PropertiesVolume are returning the same data
