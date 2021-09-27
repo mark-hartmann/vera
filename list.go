@@ -6,14 +6,14 @@ import (
 	"strings"
 )
 
-// MountProperties holds basic information about a mounted VeraCrypt container
+// MountProperties holds basic information about a mounted VeraCrypt volume
 type MountProperties struct {
 	Slot       uint8
-	Container  string
+	Volume     string
 	MountPoint string
 }
 
-// List returns a list of all mounted volumes. If no value is mounted a empty list is returned, as well
+// List returns a list of all mounted volumes. If no value is mounted an empty list is returned, as well
 // as a ErrNoVolumesMounted error
 func List() ([]MountProperties, error) {
 	cmd, stdout, _ := newCommand(list)
@@ -25,10 +25,10 @@ func List() ([]MountProperties, error) {
 	return parseListOutput(stdout.String()), nil
 }
 
-// PropertiesSlot returns a MountProperties struct for the container mounted in the given slot. This function will
-// return an error if the slot is empty or out of bounds (max 64)
+// PropertiesSlot returns a MountProperties struct for the volume mounted in the given slot. This function will
+// return an error if the slot is empty or out of bounds (see SlotMin and SlotMax)
 func PropertiesSlot(slot uint8) (MountProperties, error) {
-	if slot < 1 || slot > 64 {
+	if slot < SlotMin || slot > SlotMax {
 		return MountProperties{}, ErrParameterIncorrect
 	}
 
@@ -43,8 +43,8 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 	return parseListOutput(stdout.String())[0], nil
 }
 
-// PropertiesVolume returns a MountProperties struct for the container mounted in the given slot. This function will
-// return an error if the slot is empty or out of bounds (max 64)
+// PropertiesVolume returns a MountProperties struct for the volume mounted in the given slot. This function will
+// return an error if the slot is empty or out of bounds (see SlotMin and SlotMax)
 func PropertiesVolume(volume string) (MountProperties, error) {
 	cmd, stdout, _ := newCommand(list, Param{Value: volume})
 	if err := cmd.Run(); err != nil {
@@ -58,7 +58,7 @@ func PropertiesVolume(volume string) (MountProperties, error) {
 
 // parseListOutput takes the content of the commands stdOut and parses it
 func parseListOutput(s string) []MountProperties {
-	regex := regexp.MustCompile(`(?m)^(?P<slot>\d): (?P<container>.*) (?P<vDevice>.*) (?P<mount>.*)$`)
+	regex := regexp.MustCompile(`(?m)^(?P<slot>\d): (?P<volume>.*) (?P<vDevice>.*) (?P<mount>.*)$`)
 	var result []MountProperties
 
 	for _, entry := range strings.SplitN(s, "\n", strings.Count(s, "\n")) {
@@ -70,7 +70,7 @@ func parseListOutput(s string) []MountProperties {
 
 		result = append(result, MountProperties{
 			Slot:       uint8(slot),
-			Container:  mapped["container"],
+			Volume:     mapped["volume"],
 			MountPoint: mapped["mount"],
 		})
 	}

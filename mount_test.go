@@ -35,7 +35,7 @@ func (suite MountTestSuite) TestSlotOutOfBoundsErrParameterIncorrect() {
 	suite.ErrorIs(err, ErrParameterIncorrect)
 }
 
-func (suite *MountTestSuite) TestBasicContainerMount() {
+func (suite *MountTestSuite) TestBasicVolumeMount() {
 	props, err := Mount("./testdata/basic.vc", 2, Param{Name: "password", Value: "123456789"})
 
 	suite.NoError(err)
@@ -43,7 +43,7 @@ func (suite *MountTestSuite) TestBasicContainerMount() {
 	suite.Equal(uint8(2), props.Slot)
 }
 
-func (suite *MountTestSuite) TestBasicContainerMountComplexPassword() {
+func (suite *MountTestSuite) TestBasicVolumeMountComplexPassword() {
 	props, err := Mount("./testdata/basic-complex-pw.vc", 2, Param{Name: "password", Value: `s8&"f^T$r'`})
 
 	suite.NoError(err)

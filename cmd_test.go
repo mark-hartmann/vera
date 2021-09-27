@@ -27,7 +27,7 @@ func TestGenArgsHandlesArguments(t *testing.T) {
 	assert.Equal(t, []string{"-t", "--pim=0", "./test", "./test2"}, genArgs(params))
 }
 
-func TestGenArgsHandlesTrueCrypt(t *testing.T) {
+func TestGenArgsHandlesTrueCryptAsSpecialParam(t *testing.T) {
 	params := []Param{
 		{Name: "t", IsFlag: true},
 		{Name: "non-interactive", IsFlag: true},
