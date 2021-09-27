@@ -4,6 +4,9 @@ import (
 	"strings"
 )
 
+const SlotMin = 1
+const SlotMax = 64
+
 // Installed returns whether VeraCrypt is installed or not, as well es the installed
 // version, e.g. VeraCrypt 1.24-Update7
 func Installed() (string, bool) {

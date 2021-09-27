@@ -8,7 +8,7 @@ import (
 // must be set, but at least the password
 func Mount(container string, slot uint8, opts ...Param) (MountProperties, error) {
 	// check if the slot number is supported
-	if slot < 1 || slot > 64 {
+	if slot < SlotMin || slot > SlotMax {
 		return MountProperties{}, ErrParameterIncorrect
 	}
 

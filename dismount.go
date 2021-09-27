@@ -15,7 +15,7 @@ func DismountAll() error {
 
 // DismountSlot dismounts a volume using it's assigned mount slot. The mount slot range is 1-64
 func DismountSlot(slot uint8) error {
-	if slot < 1 || slot > 64 {
+	if slot < SlotMin || slot > SlotMax {
 		return ErrParameterIncorrect
 	}
 
