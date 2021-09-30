@@ -24,6 +24,9 @@ var ErrNoSuchVolumeMounted = errors.New("no such volume is mounted")
 // mount a volume. A program using this library must be started with appropriate privileges to run VeraCrypt
 var ErrAdministratorPrivileges = errors.New("failed to obtain administrator privileges")
 
+// ErrNoSuchFileOrDirectory gets returned when trying to mount a volume, but VeraCrypt is unable to locate it
+var ErrNoSuchFileOrDirectory = errors.New("no such file or directory")
+
 // ErrNoVolumePath gets returned when trying to call a *Volume func without providing a valid volume path, e.g. an
 // empty string. This error is no VeraCrypt error
 var ErrNoVolumePath = errors.New("no volume path provided")
