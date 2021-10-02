@@ -20,6 +20,16 @@ func newCommand(args ...Param) (cmd *exec.Cmd, stdout, stderr *bytes.Buffer) {
 	return
 }
 
+// ExecCommand executes a simple VeraScript command and returns the console output and a parsed error if necessary
+func ExecCommand(args ...Param) (stdout *bytes.Buffer, err error) {
+	cmd, stdout, stderr := newCommand(args...)
+	if err = cmd.Run(); err != nil {
+		return stdout, parseError(stderr.String())
+	}
+
+	return stdout, nil
+}
+
 // genArgs takes a slice of Param structs and generates a slice of strings to pass to the cmd instance
 func genArgs(p []Param) []string {
 	// add the two required parameters

@@ -14,10 +14,9 @@ func Mount(volume string, slot uint8, opts ...Param) (MountProperties, error) {
 
 	// append path and mount as Param
 	opts = append(opts, Param{Value: volume}, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
-	cmd, _, stderr := newCommand(opts...)
-
-	if err := cmd.Run(); err != nil {
-		return MountProperties{}, parseError(stderr.String())
+	_, err := ExecCommand(opts...)
+	if err != nil {
+		return MountProperties{}, err
 	}
 
 	return PropertiesSlot(slot)

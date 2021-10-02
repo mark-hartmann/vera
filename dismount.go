@@ -4,12 +4,8 @@ import "strconv"
 
 // DismountAll dismounts all mounted volumes
 func DismountAll() error {
-	cmd, _, stderr := newCommand(dismount)
-	if err := cmd.Run(); err != nil {
-		return parseError(stderr.String())
-	}
-
-	return nil
+	_, err := ExecCommand(dismount)
+	return err
 }
 
 // DismountSlot dismounts a volume using it's assigned mount slot. The mount slot range is 1-64
@@ -18,12 +14,8 @@ func DismountSlot(slot uint8) error {
 		return err
 	}
 
-	cmd, _, stderr := newCommand(dismount, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
-	if err := cmd.Run(); err != nil {
-		return parseError(stderr.String())
-	}
-
-	return nil
+	_, err := ExecCommand(dismount, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
+	return err
 }
 
 // DismountVolume dismounts a volume using the volume path. To dismount all currently mounted volumes, use DismountAll.
@@ -33,10 +25,6 @@ func DismountVolume(path string) error {
 		return ErrNoVolumePath
 	}
 
-	cmd, _, stderr := newCommand(dismount, arg(path))
-	if err := cmd.Run(); err != nil {
-		return parseError(stderr.String())
-	}
-
-	return nil
+	_, err := ExecCommand(dismount, arg(path))
+	return err
 }

@@ -16,10 +16,10 @@ type MountProperties struct {
 // List returns a list of all mounted volumes. If no value is mounted an empty list is returned, as well
 // as a ErrNoVolumesMounted error
 func List() ([]MountProperties, error) {
-	cmd, stdout, stderr := newCommand(list)
-	if err := cmd.Run(); err != nil {
-		// parse error from stderr and return this instead of the error itself, which is "exit status 1"
-		return make([]MountProperties, 0), parseError(stderr.String())
+
+	stdout, err := ExecCommand(list)
+	if err != nil {
+		return make([]MountProperties, 0), err
 	}
 
 	return parseListOutput(stdout.String()), nil
@@ -32,11 +32,9 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 		return MountProperties{}, err
 	}
 
-	cmd, stdout, stderr := newCommand(list, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
-	if err := cmd.Run(); err != nil {
-		// we handled the valid slot range above and --list does not require su privileges, so we can simply return
-		// ErrNoSuchVolumeMounted
-		return MountProperties{}, parseError(stderr.String())
+	stdout, err := ExecCommand(list, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
+	if err != nil {
+		return MountProperties{}, err
 	}
 
 	// parse the stdout, because we used the slot flag, only one entry is returned
@@ -46,10 +44,10 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 // PropertiesVolume returns a MountProperties struct for the volume mounted in the given slot. This function will
 // return an error if the slot is empty or out of bounds (see SlotMin and SlotMax)
 func PropertiesVolume(volume string) (MountProperties, error) {
-	cmd, stdout, stderr := newCommand(list, Param{Value: volume})
-	if err := cmd.Run(); err != nil {
-		// --list does not require su privileges, so we can simply return ErrNoSuchVolumeMounted
-		return MountProperties{}, parseError(stderr.String())
+
+	stdout, err := ExecCommand(list, Param{Value: volume})
+	if err != nil {
+		return MountProperties{}, err
 	}
 
 	// parse the stdout, because we used the slot flag, only one entry is returned
