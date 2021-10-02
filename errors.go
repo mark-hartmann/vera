@@ -38,3 +38,7 @@ var ErrNoVolumesMounted = errors.New("no volumes mounted")
 // ErrUnknown is returned if an operation failed, but the exact reason cannot be determined. This error is no
 // VeraCrypt error
 var ErrUnknown = errors.New("an unknown error has occurred")
+
+// ErrCommandNotFound is returned if VeraCrypt (or any other program) is not installed on the operating system (linux).
+// This error may differ between systems. This error is no VeraCrypt error
+var ErrCommandNotFound = errors.New("command not found")

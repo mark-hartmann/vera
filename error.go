@@ -13,6 +13,7 @@ var errRegexp = map[error]*regexp.Regexp{
 	ErrAdministratorPrivileges:       regexp.MustCompile(`(?m)Error: (?P<msg>Failed to obtain administrator privileges)\.`),
 	ErrNoSuchFileOrDirectory:         regexp.MustCompile(`(?m)Error: (?P<msg>No such file or directory):\n(?P<err>.*?)\n`),
 	ErrNoVolumesMounted:              regexp.MustCompile(`(?m)Error: (?P<msg>No volumes mounted)\.`),
+	ErrCommandNotFound:               regexp.MustCompile(`(?m)(?P<msg>.*: command not found)`),
 }
 
 type Error struct {

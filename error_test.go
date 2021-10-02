@@ -146,3 +146,11 @@ func TestErrUnknown(t *testing.T) {
 		assert.Equal(t, ErrUnknown.Error(), err.Unwrap().Error())
 	}
 }
+
+func TestErrCommandNotFound(t *testing.T) {
+	err := parseError("veracrypt: command not found")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrCommandNotFound)
+	assert.Equal(t, "veracrypt: command not found", err.Error())
+	assert.Equal(t, ErrCommandNotFound.Error(), err.Unwrap().Error())
+}
