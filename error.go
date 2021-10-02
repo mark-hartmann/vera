@@ -12,6 +12,7 @@ var errRegexp = map[error]*regexp.Regexp{
 	ErrNoSuchVolumeMounted:           regexp.MustCompile(`(?m)Error: (?P<msg>No such volume is mounted)\.`),
 	ErrAdministratorPrivileges:       regexp.MustCompile(`(?m)Error: (?P<msg>Failed to obtain administrator privileges)\.`),
 	ErrNoSuchFileOrDirectory:         regexp.MustCompile(`(?m)Error: (?P<msg>No such file or directory):\n(?P<err>.*?)\n`),
+	ErrNoVolumesMounted:              regexp.MustCompile(`(?m)Error: (?P<msg>No volumes mounted)\.`),
 }
 
 type Error struct {
@@ -31,7 +32,6 @@ func (e Error) Unwrap() error {
 func newError(cause error, msg string) *Error {
 	return &Error{cause, msg}
 }
-
 
 // parseError tries to match the passed stderr based on the errors contained in errRegexp map
 func parseError(stderr string) Error {

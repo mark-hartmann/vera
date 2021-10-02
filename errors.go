@@ -31,8 +31,8 @@ var ErrNoSuchFileOrDirectory = errors.New("no such file or directory")
 // empty string. This error is no VeraCrypt error
 var ErrNoVolumePath = errors.New("no volume path provided")
 
-// ErrNoVolumesMounted is a somewhat false positive error as it is only returned by List to indicate that no volumes
-// are mounted. This error is no VeraCrypt error
+// ErrNoVolumesMounted is not an error in the normal sense, since it only indicates that no volumes were mounted.
+// This error gets returned when trying to use -l / --list
 var ErrNoVolumesMounted = errors.New("no volumes mounted")
 
 // ErrUnknown is returned if an operation failed, but the exact reason cannot be determined. This error is no

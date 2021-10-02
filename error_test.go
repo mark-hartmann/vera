@@ -121,6 +121,14 @@ VeraCrypt::File::Open:232`,
 	}
 }
 
+func TestErrNoVolumesMounted(t *testing.T) {
+	err := parseError("Error: No volumes mounted.")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrNoVolumesMounted)
+	assert.Equal(t, "no volumes mounted", err.Error())
+	assert.Equal(t, ErrNoVolumesMounted.Error(), err.Unwrap().Error())
+}
+
 func TestErrUnknown(t *testing.T) {
 
 	errMap := []string{
