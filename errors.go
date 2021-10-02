@@ -34,3 +34,7 @@ var ErrNoVolumePath = errors.New("no volume path provided")
 // ErrNoVolumesMounted is a somewhat false positive error as it is only returned by List to indicate that no volumes
 // are mounted. This error is no VeraCrypt error
 var ErrNoVolumesMounted = errors.New("no volumes mounted")
+
+// ErrUnknown is returned if an operation failed, but the exact reason cannot be determined. This error is no
+// VeraCrypt error
+var ErrUnknown = errors.New("an unknown error has occurred")
