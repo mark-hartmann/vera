@@ -8,16 +8,16 @@ import (
 // least the password
 func Mount(volume string, slot uint8, opts ...Param) (MountProperties, error) {
 	// check if the slot number is supported
-	if slot < SlotMin || slot > SlotMax {
-		return MountProperties{}, ErrParameterIncorrect
+	if err := slotValid(slot); err != nil {
+		return MountProperties{}, err
 	}
 
 	// append path and mount as Param
 	opts = append(opts, Param{Value: volume}, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
-	cmd, _, _ := newCommand(opts...)
+	cmd, _, stderr := newCommand(opts...)
 
 	if err := cmd.Run(); err != nil {
-		return MountProperties{}, err
+		return MountProperties{}, parseError(stderr.String())
 	}
 
 	return PropertiesSlot(slot)

@@ -4,10 +4,9 @@ import "strconv"
 
 // DismountAll dismounts all mounted volumes
 func DismountAll() error {
-	cmd, _, _ := newCommand(dismount)
+	cmd, _, stderr := newCommand(dismount)
 	if err := cmd.Run(); err != nil {
-		// todo right now it just assumes this is the correct error, create a parseError function later
-		return err
+		return parseError(stderr.String())
 	}
 
 	return nil
@@ -15,13 +14,13 @@ func DismountAll() error {
 
 // DismountSlot dismounts a volume using it's assigned mount slot. The mount slot range is 1-64
 func DismountSlot(slot uint8) error {
-	if slot < SlotMin || slot > SlotMax {
-		return ErrParameterIncorrect
+	if err := slotValid(slot); err != nil {
+		return err
 	}
 
-	cmd, _, _ := newCommand(dismount, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
+	cmd, _, stderr := newCommand(dismount, Param{Name: "slot", Value: strconv.Itoa(int(slot))})
 	if err := cmd.Run(); err != nil {
-		return ErrNoSuchVolumeMounted
+		return parseError(stderr.String())
 	}
 
 	return nil
@@ -34,10 +33,9 @@ func DismountVolume(path string) error {
 		return ErrNoVolumePath
 	}
 
-	cmd, _, _ := newCommand(dismount, arg(path))
+	cmd, _, stderr := newCommand(dismount, arg(path))
 	if err := cmd.Run(); err != nil {
-		// todo right now it just assumes this is the correct error, create a parseError function later
-		return ErrNoSuchVolumeMounted
+		return parseError(stderr.String())
 	}
 
 	return nil

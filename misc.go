@@ -1,6 +1,7 @@
 package vera
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -19,4 +20,15 @@ func Installed() (string, bool) {
 
 	// the stdout content has a newline, so we simply trim it away
 	return strings.Trim(stdout.String(), "\n"), true
+}
+
+// slotValid returns an ErrParameterIncorrect error if the supplied slot is not valid (at least SlotMin and at
+// most SlotMax). Using this func can prevent an unnecessary cli call
+func slotValid(slot uint8) error {
+	if slot < SlotMin || slot > SlotMax {
+		msg := ErrParameterIncorrect.Error() + ": " + strconv.Itoa(int(slot))
+		return Error{cause: ErrParameterIncorrect, message: msg}
+	}
+
+	return nil
 }
