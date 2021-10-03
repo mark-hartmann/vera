@@ -14,11 +14,11 @@ func TestDismountTestSuite(t *testing.T) {
 }
 
 func (suite *DismountTestSuite) BeforeTest(_, _ string) {
-	dismountAll()
+	DismountAll()
 }
 
 func (suite *DismountTestSuite) AfterTest(_, _ string) {
-	dismountAll()
+	DismountAll()
 }
 
 // make sure no error is returned if no volume is mounted

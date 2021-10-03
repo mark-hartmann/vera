@@ -16,12 +16,12 @@ func TestListTestSuite(t *testing.T) {
 
 // dismount all mounted volumes
 func (suite *ListTestSuite) BeforeTest(_, _ string) {
-	dismountAll()
+	DismountAll()
 }
 
 // dismount all mounted volumes
 func (suite *ListTestSuite) AfterTest(_, _ string) {
-	dismountAll()
+	DismountAll()
 }
 
 // make sure list returns an empty array even if VeraCrypt returns an ErrNoVolumesMounted error. If no volumes are
