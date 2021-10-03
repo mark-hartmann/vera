@@ -14,6 +14,7 @@ var errRegexp = map[error]*regexp.Regexp{
 	ErrNoSuchFileOrDirectory:         regexp.MustCompile(`(?m)Error: (?P<msg>No such file or directory):\n(?P<err>.*?)\n`),
 	ErrNoVolumesMounted:              regexp.MustCompile(`(?m)Error: (?P<msg>No volumes mounted)\.`),
 	ErrCommandNotFound:               regexp.MustCompile(`(?m)(?P<msg>.*: command not found)`),
+	ErrOperationFailed:               regexp.MustCompile(`(?m)Error: (?P<msg>Operation failed) due to one or more of the following:`),
 }
 
 type Error struct {

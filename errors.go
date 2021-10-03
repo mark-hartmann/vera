@@ -27,13 +27,14 @@ var ErrAdministratorPrivileges = errors.New("failed to obtain administrator priv
 // ErrNoSuchFileOrDirectory gets returned when trying to mount a volume, but VeraCrypt is unable to locate it
 var ErrNoSuchFileOrDirectory = errors.New("no such file or directory")
 
-// ErrNoVolumePath gets returned when trying to call a *Volume func without providing a valid volume path, e.g. an
-// empty string. This error is no VeraCrypt error
-var ErrNoVolumePath = errors.New("no volume path provided")
-
 // ErrNoVolumesMounted is not an error in the normal sense, since it only indicates that no volumes were mounted.
 // This error gets returned when trying to use -l / --list
 var ErrNoVolumesMounted = errors.New("no volumes mounted")
+
+// ErrOperationFailed is returned when VeraCrypt failed to mount a volume due to faulty details, such as incorrect
+// password or passing a file path that is not a volume. Unfortunately VeraCrypt does not tell the exact cause of this
+// error, so it is up to the user to check the details they used
+var ErrOperationFailed = errors.New("operation failed")
 
 // ErrUnknown is returned if an operation failed, but the exact reason cannot be determined. This error is no
 // VeraCrypt error
@@ -42,3 +43,7 @@ var ErrUnknown = errors.New("an unknown error has occurred")
 // ErrCommandNotFound is returned if VeraCrypt (or any other program) is not installed on the operating system (linux).
 // This error may differ between systems. This error is no VeraCrypt error
 var ErrCommandNotFound = errors.New("command not found")
+
+// ErrNoVolumePath gets returned when trying to call a *Volume func without providing a valid volume path, e.g. an
+// empty string. This error is no VeraCrypt error
+var ErrNoVolumePath = errors.New("no volume path provided")

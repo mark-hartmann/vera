@@ -154,3 +154,15 @@ func TestErrCommandNotFound(t *testing.T) {
 	assert.Equal(t, "veracrypt: command not found", err.Error())
 	assert.Equal(t, ErrCommandNotFound.Error(), err.Unwrap().Error())
 }
+
+func TestErrOperationFailed(t *testing.T) {
+	err := parseError(`Error: Operation failed due to one or more of the following:
+- Incorrect password.
+- Incorrect Volume PIM number.
+- Incorrect PRF (hash).
+- Not a valid volume.`)
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrOperationFailed)
+	assert.Equal(t, "operation failed", err.Error())
+	assert.Equal(t, ErrOperationFailed.Error(), err.Unwrap().Error())
+}

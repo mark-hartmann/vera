@@ -14,11 +14,11 @@ func TestMountTestSuite(t *testing.T) {
 }
 
 func (suite *MountTestSuite) BeforeTest(suiteName, testName string) {
-	dismountAll()
+	DismountAll()
 }
 
 func (suite *MountTestSuite) AfterTest(suiteName, testName string) {
-	dismountAll()
+	DismountAll()
 }
 
 func (suite MountTestSuite) TestSlotOutOfBoundsErrParameterIncorrect() {
@@ -43,15 +43,18 @@ func (suite *MountTestSuite) TestBasicVolumeMount() {
 	suite.Equal(uint8(2), props.Slot)
 }
 
+func (suite *MountTestSuite) TestBasicVolumeMountIncorrectPassword() {
+	props, err := Mount("./testdata/basic.vc", 2, Param{Name: "password", Value: "1234567890"}) // password is 123456789
+
+	suite.Error(err)
+	suite.ErrorIs(err, ErrOperationFailed)
+	suite.Equal(MountProperties{}, props)
+}
+
 func (suite *MountTestSuite) TestBasicVolumeMountComplexPassword() {
 	props, err := Mount("./testdata/basic-complex-pw.vc", 2, Param{Name: "password", Value: `s8&"f^T$r'`})
 
 	suite.NoError(err)
 	suite.NotEqual(MountProperties{}, props)
 	suite.Equal(uint8(2), props.Slot)
-}
-
-// dismountAll dismounts all currently mounted volumes
-func dismountAll() {
-	DismountAll()
 }
