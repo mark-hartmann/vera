@@ -7,9 +7,9 @@ import (
 
 // todo: find a way to test this properly
 func TestInstalled(t *testing.T) {
-	version, ok := Installed()
+	version, err := Installed()
 
-	assert.True(t, ok)
+	assert.NoError(t, err)
 	assert.NotEmpty(t, version)
 	assert.Contains(t, version, "VeraCrypt")
 }
