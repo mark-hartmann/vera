@@ -2,8 +2,8 @@ package vera
 
 import "fmt"
 
-// TrueCrypt tells VeraCrypt to mount the given volume in TrueCrypt mode for backward compatability
-var TrueCrypt = Param{Name: "truecrypt", IsFlag: true}
+// trueCrypt tells VeraCrypt to mount the given volume in trueCrypt mode for backward compatability
+var trueCrypt = Param{Name: "truecrypt", IsFlag: true}
 
 // nonInteractive represents the "--non-interactive" flag. This is only for internal use, as direct communication is not
 // supported (yet?)

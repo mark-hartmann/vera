@@ -20,7 +20,8 @@ func newCommand(args ...Param) (cmd *exec.Cmd, stdout, stderr *bytes.Buffer) {
 	return
 }
 
-// ExecCommand executes a simple VeraScript command and returns the console output and a parsed error if necessary
+// ExecCommand executes a simple command and returns a buffer with the console output and eventually an
+// error, if an error was encountered.
 func ExecCommand(args ...Param) (stdout *bytes.Buffer, err error) {
 	cmd, stdout, stderr := newCommand(args...)
 	if err = cmd.Run(); err != nil {
@@ -37,7 +38,7 @@ func genArgs(p []Param) []string {
 	var params []string
 
 	for _, param := range p {
-		if param.Name == TrueCrypt.Name || param.Name == "tc" {
+		if param.Name == trueCrypt.Name || param.Name == "tc" {
 			// prepend --truecrypt to avoid any issues, see "veracrypt --help" for more details
 			params = append([]string{param.String()}, params...)
 			continue
