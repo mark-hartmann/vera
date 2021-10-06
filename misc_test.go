@@ -16,11 +16,11 @@ func TestInstalled(t *testing.T) {
 
 func TestSlotValid(t *testing.T) {
 
-	err := slotValid(SlotMin)
+	err := slotValid(slotMin)
 	assert.NoError(t, err)
 	assert.Nil(t, err)
 
-	err = slotValid(SlotMax)
+	err = slotValid(slotMax)
 	assert.NoError(t, err)
 	assert.Nil(t, err)
 

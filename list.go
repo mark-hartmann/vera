@@ -26,7 +26,7 @@ func List() ([]MountProperties, error) {
 }
 
 // PropertiesSlot returns a MountProperties struct for the volume mounted in the given slot. This function will
-// return an error if the slot is empty or out of bounds (see SlotMin and SlotMax)
+// return an error if the slot is empty or out of bounds (1-64)
 func PropertiesSlot(slot uint8) (MountProperties, error) {
 	if err := slotValid(slot); err != nil {
 		return MountProperties{}, err
@@ -42,7 +42,7 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 }
 
 // PropertiesVolume returns a MountProperties struct for the volume mounted in the given slot. This function will
-// return an error if the slot is empty or out of bounds (see SlotMin and SlotMax)
+// return an error if the slot is empty or out of bounds (1-64)
 func PropertiesVolume(volume string) (MountProperties, error) {
 
 	stdout, err := ExecCommand(list, Param{Value: volume})
