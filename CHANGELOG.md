@@ -4,7 +4,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2021-10-06
+## [0.1.0] - 2021-10-07
 Initial release
 ### Added
 - Basic functions and structs for communicating with the veracrypt cli
