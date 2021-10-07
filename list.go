@@ -44,6 +44,9 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 // PropertiesVolume returns a MountProperties struct for the volume mounted in the given slot. This function will
 // return an error if the slot is empty or out of bounds (1-64)
 func PropertiesVolume(volume string) (MountProperties, error) {
+	if len(volume) == 0 {
+		return MountProperties{}, ErrNoVolumePath
+	}
 
 	stdout, err := ExecCommand(list, Param{Value: volume})
 	if err != nil {
