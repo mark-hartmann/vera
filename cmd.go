@@ -20,7 +20,7 @@ func newCommand(args ...Param) (cmd *exec.Cmd, stdout, stderr *bytes.Buffer) {
 	return
 }
 
-// ExecCommandWithStdin adds string to the stdin in of a command, executes the command and returns a buffer with the console output and eventually an
+// ExecCommandWithStdin adds a string to the stdin of a command, executes the command and returns a buffer with the console output and eventually an
 // error, if an error was encountered.
 func ExecCommandWithStdin(stdin string, args ...Param) (stdout *bytes.Buffer, err error) {
 
