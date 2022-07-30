@@ -20,10 +20,23 @@ func newCommand(args ...Param) (cmd *exec.Cmd, stdout, stderr *bytes.Buffer) {
 	return
 }
 
+func ExecCommandWithStdin(stdin string, args ...Param) (stdout *bytes.Buffer, err error) {
+
+	cmd, stdout, stderr := newCommand(args...)
+	cmd.Stdin = strings.NewReader(stdin)
+
+	if err = cmd.Run(); err != nil {
+		return stdout, parseError(stderr.String())
+	}
+
+	return stdout, nil
+}
+
 // ExecCommand executes a simple command and returns a buffer with the console output and eventually an
 // error, if an error was encountered.
 func ExecCommand(args ...Param) (stdout *bytes.Buffer, err error) {
 	cmd, stdout, stderr := newCommand(args...)
+
 	if err = cmd.Run(); err != nil {
 		return stdout, parseError(stderr.String())
 	}
