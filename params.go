@@ -35,7 +35,7 @@ type Param struct {
 	IsFlag bool   // IsFlag must be set to true for flags, e.g. --truecrypt or --version
 }
 
-// String returns 
+// String returns the string representation of a param
 func (p Param) String() string {
 	var param string
 	if len(p.Name) < 3 {
