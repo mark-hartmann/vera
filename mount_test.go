@@ -26,18 +26,18 @@ func (suite MountTestSuite) TestSlotOutOfBoundsErrParameterIncorrect() {
 	emptyProps := MountProperties{}
 
 	// there is no slot 0
-	props, err := Mount("./testdata/basic.vc", 0, "123456789")
+	props, err := MountSlot("./testdata/basic.vc", 0, "123456789")
 	suite.Equal(emptyProps, props)
 	suite.ErrorIs(err, ErrParameterIncorrect)
 
 	// VeraCrypt only supports 64 slots
-	_, err = Mount("./testdata/basic.vc", 65, "123456789")
+	_, err = MountSlot("./testdata/basic.vc", 65, "123456789")
 	suite.Equal(emptyProps, props)
 	suite.ErrorIs(err, ErrParameterIncorrect)
 }
 
 func (suite *MountTestSuite) TestBasicVolumeMount() {
-	props, err := Mount("./testdata/basic.vc", 2, "123456789")
+	props, err := MountSlot("./testdata/basic.vc", 2, "123456789")
 
 	suite.NoError(err)
 	suite.NotEqual(MountProperties{}, props)
@@ -45,7 +45,7 @@ func (suite *MountTestSuite) TestBasicVolumeMount() {
 }
 
 func (suite *MountTestSuite) TestBasicVolumeMountIncorrectPassword() {
-	props, err := Mount("./testdata/basic.vc", 2, "1234567890") // password is 123456789
+	props, err := MountSlot("./testdata/basic.vc", 2, "1234567890") // password is 123456789
 
 	suite.Error(err)
 	suite.ErrorIs(err, ErrOperationFailed)
@@ -53,7 +53,7 @@ func (suite *MountTestSuite) TestBasicVolumeMountIncorrectPassword() {
 }
 
 func (suite *MountTestSuite) TestBasicVolumeMountComplexPassword() {
-	props, err := Mount("./testdata/basic-complex-pw.vc", 2, `s8&"f^T$r'`)
+	props, err := MountSlot("./testdata/basic-complex-pw.vc", 2, `s8&"f^T$r'`)
 
 	suite.NoError(err)
 	suite.NotEqual(MountProperties{}, props)

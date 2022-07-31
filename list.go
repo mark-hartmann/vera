@@ -41,8 +41,19 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 	return parseListOutput(stdout.String())[0], nil
 }
 
-// PropertiesVolume returns a MountProperties struct for the volume mounted in the given slot. This function will
-// return an error if the slot is empty or out of bounds (1-64)
+// PropertiesSlot returns a MountProperties struct for the volume mounted on the given mountPoint
+func PropertiesMountpoint(mountPoint string) (MountProperties, error) {
+
+	stdout, err := ExecCommand(list, Param{Value: mountPoint})
+	if err != nil {
+		return MountProperties{}, err
+	}
+
+	// parse the stdout, because we used the slot flag, only one entry is returned
+	return parseListOutput(stdout.String())[0], nil
+}
+
+// PropertiesVolume returns a MountProperties struct for the volume mounted in the given slot.
 func PropertiesVolume(volume string) (MountProperties, error) {
 	if len(volume) == 0 {
 		return MountProperties{}, ErrNoVolumePath
@@ -53,7 +64,7 @@ func PropertiesVolume(volume string) (MountProperties, error) {
 		return MountProperties{}, err
 	}
 
-	// parse the stdout, because we used the slot flag, only one entry is returned
+	// parse the stdout, because we used the volume param, only one entry is returned
 	return parseListOutput(stdout.String())[0], nil
 }
 

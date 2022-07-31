@@ -51,7 +51,7 @@ func (suite *DismountTestSuite) TestDismountSlotReturnsErrParameterIncorrectIfIn
 }
 
 func (suite *DismountTestSuite) TestDismountSlotReturnsNoErrMountedVolumeDismounted() {
-	_, err := Mount("./testdata/basic.vc", 1, "123456789")
+	_, err := MountSlot("./testdata/basic.vc", 1, "123456789")
 	suite.NoError(err)
 
 	err = DismountSlot(1)
@@ -59,7 +59,7 @@ func (suite *DismountTestSuite) TestDismountSlotReturnsNoErrMountedVolumeDismoun
 }
 
 func (suite *DismountTestSuite) TestDismountVolumeReturnsNoErrMountedVolumeDismounted() {
-	_, err := Mount("./testdata/basic.vc", 1, "123456789")
+	_, err := MountSlot("./testdata/basic.vc", 1, "123456789")
 	suite.NoError(err)
 
 	err = DismountVolume("./testdata/basic.vc")
@@ -67,7 +67,7 @@ func (suite *DismountTestSuite) TestDismountVolumeReturnsNoErrMountedVolumeDismo
 }
 
 func (suite *DismountTestSuite) TestDismountVolumeReturnsErrMountedVolumeDismountedOnlyName() {
-	_, err := Mount("./testdata/basic.vc", 1, "123456789")
+	_, err := MountSlot("./testdata/basic.vc", 1, "123456789")
 	suite.NoError(err)
 
 	err = DismountVolume("basic.vc")
@@ -76,7 +76,7 @@ func (suite *DismountTestSuite) TestDismountVolumeReturnsErrMountedVolumeDismoun
 }
 
 func (suite *DismountTestSuite) TestDismountAllReturnsNoErrMountedVolumeDismounted() {
-	_, err := Mount("./testdata/basic.vc", 1, "123456789")
+	_, err := MountSlot("./testdata/basic.vc", 1, "123456789")
 	suite.NoError(err)
 
 	err = DismountAll()

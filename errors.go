@@ -47,3 +47,12 @@ var ErrCommandNotFound = errors.New("command not found")
 // ErrNoVolumePath gets returned when trying to call a *Volume func without providing a valid volume path, e.g. an
 // empty string. This error is no VeraCrypt error
 var ErrNoVolumePath = errors.New("no volume path provided")
+
+// ErrMountPointDoesNotExist is returned when mounting a volume to a mount point that does not exist
+var ErrMountPointDoesNotExist = errors.New("mount point does not exist")
+
+// ErrMountPointIsNotADirectory is returned when the mount point is not a directory
+var ErrMountPointIsNotADirectory = errors.New("mount point is not a directory")
+
+// ErrMountPointIsAlreadyInUse is returned when the mount point is already mounted by another volume
+var ErrMountPointIsAlreadyInUse = errors.New("mount point is already in use")

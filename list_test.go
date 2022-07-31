@@ -77,7 +77,7 @@ func (suite ListTestSuite) TestPropertiesVolumeErrNoSuchVolumeMounted() {
 // check if the PropertiesSlot func returns a MountProperties struct that matches the mounted volume
 func (suite ListTestSuite) TestPropertiesSlotReturnsCorrectMountProperties() {
 	const volume = "./testdata/basic.vc"
-	mountProps, err := Mount(volume, 1, "123456789")
+	mountProps, err := MountSlot(volume, 1, "123456789")
 	suite.NoError(err)
 
 	props, err := PropertiesSlot(1)
@@ -90,7 +90,7 @@ func (suite ListTestSuite) TestPropertiesSlotReturnsCorrectMountProperties() {
 // check if the PropertiesVolume func returns a MountProperties struct that matches the mounted volume
 func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
 	const volume = "./testdata/basic.vc"
-	mountProps, err := Mount(volume, 1, "123456789")
+	mountProps, err := MountSlot(volume, 1, "123456789")
 	suite.NoError(err)
 
 	props, err := PropertiesVolume(volume)
@@ -103,7 +103,7 @@ func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
 // make sure both PropertiesSlot and PropertiesVolume are returning the same data
 func (suite ListTestSuite) TestPropertiesVolumeAndPropertiesSlotReturnTheSameData() {
 	const volume = "./testdata/basic.vc"
-	_, err := Mount(volume, 1, "123456789")
+	_, err := MountSlot(volume, 1, "123456789")
 	suite.NoError(err)
 
 	propsSlot, _ := PropertiesSlot(1)
