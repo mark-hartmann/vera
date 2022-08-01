@@ -196,6 +196,6 @@ func TestErrVolumeAlreadyMounted(t *testing.T) {
 	err := parseError("Error: The volume you are trying to mount is already mounted.")
 	assert.Error(t, err)
 	assert.ErrorIs(t, err, ErrVolumeAlreadyMounted)
-	assert.Equal(t, "The volume you are trying to mount is already mounted", err.Error())
+	assert.Equal(t, "the volume you are trying to mount is already mounted", err.Error())
 	assert.Equal(t, ErrVolumeAlreadyMounted.Error(), err.Unwrap().Error())
 }
