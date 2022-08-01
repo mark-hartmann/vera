@@ -16,12 +16,12 @@ func TestListTestSuite(t *testing.T) {
 }
 
 // dismount all mounted volumes
-func (suite *ListTestSuite) BeforeTest(_, _ string) {
+func (suite ListTestSuite) BeforeTest(_, _ string) {
 	DismountAll()
 }
 
 // dismount all mounted volumes
-func (suite *ListTestSuite) AfterTest(_, _ string) {
+func (suite ListTestSuite) AfterTest(_, _ string) {
 	DismountAll()
 }
 
@@ -100,13 +100,29 @@ func (suite ListTestSuite) TestPropertiesVolumeReturnsCorrectMountProperties() {
 	suite.Contains(props.Volume, path.Clean(volume))
 }
 
+func (suite ListTestSuite) TestPropertiesMountpointReturnsCorrectMountProperties() {
+	props, err := MountSlot("./testdata/basic.vc", 1, "123456789")
+	suite.NoError(err)
+
+	propsSlot, _ := PropertiesSlot(1)
+	propsMountPoint, _ := PropertiesMountpoint(props.MountPoint)
+	suite.Equal(propsSlot, propsMountPoint)
+}
+
+func (suite ListTestSuite) TestPropertiesMountpointReturnsErrNoSuchVolumeMounted() {
+	_, err := PropertiesMountpoint("./invalid-mount-point")
+	suite.ErrorIs(err, ErrNoSuchVolumeMounted)
+}
+
 // make sure both PropertiesSlot and PropertiesVolume are returning the same data
-func (suite ListTestSuite) TestPropertiesVolumeAndPropertiesSlotReturnTheSameData() {
+func (suite ListTestSuite) TestPropertiesVolumeAndPropertiesSlotAndPropertiesMountpointReturnTheSameData() {
 	const volume = "./testdata/basic.vc"
 	_, err := MountSlot(volume, 1, "123456789")
 	suite.NoError(err)
 
 	propsSlot, _ := PropertiesSlot(1)
 	propsVolume, _ := PropertiesVolume(path.Clean(volume))
+	propsMountpoint, _ := PropertiesVolume(path.Clean(volume))
 	suite.Equal(propsSlot, propsVolume)
+	suite.Equal(propsVolume, propsMountpoint)
 }
