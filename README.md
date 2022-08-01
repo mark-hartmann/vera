@@ -89,15 +89,17 @@ _, err := vera.ExecCommand(tc, volume, pwd)
 Depending on the application requirements, it may be helpful to set up frequently used parameters as variables:
 ```go
 var NoFileSystem := vera.Param{Name: "filesystem", Value: "none"}
-var DefaultPassword := vera.Param{Name: "p", Value: "<your password>"} // please don't do this
 
 func mountNoFs() {
-    _, err := vera.MountSlot("./container.vc", 1, NoFileSystem, DefaultPassword)
+    _, err := vera.MountSlot("./container.vc", 1, "<password>", NoFileSystem)
     if err != nil { 
         // do something
     }
 }
 ```
+
+### Running Unit Tests
+For the tests to work properly, a `mount directory must be created in the testdata directory to be used as a mount point.
 
 ---
 #### Notes

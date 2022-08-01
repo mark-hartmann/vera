@@ -4,7 +4,7 @@ import (
 	"strconv"
 )
 
-// Mount mounts the volume in the given slot. Depending on the volume, the appropriate parameters must be set.
+// MountSlot mounts the volume in the given slot. Depending on the volume, the appropriate parameters must be set.
 // password is passed through stdin
 func MountSlot(volume string, slot uint8, password string, opts ...Param) (MountProperties, error) {
 	// check if the slot number is supported
@@ -22,7 +22,7 @@ func MountSlot(volume string, slot uint8, password string, opts ...Param) (Mount
 	return PropertiesVolume(volume)
 }
 
-// Mount mounts the volume in the given path. Depending on the volume, the appropriate parameters must be set.
+// MountPath mounts the volume in the given path. Depending on the volume, the appropriate parameters must be set.
 // password is passed through stdin
 func MountPath(volume string, path string, password string, opts ...Param) (MountProperties, error) {
 

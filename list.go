@@ -41,7 +41,7 @@ func PropertiesSlot(slot uint8) (MountProperties, error) {
 	return parseListOutput(stdout.String())[0], nil
 }
 
-// PropertiesSlot returns a MountProperties struct for the volume mounted on the given mountPoint
+// PropertiesMountpoint returns a MountProperties struct for the volume mounted on the given mountPoint
 func PropertiesMountpoint(mountPoint string) (MountProperties, error) {
 
 	stdout, err := ExecCommand(list, Param{Value: mountPoint})
