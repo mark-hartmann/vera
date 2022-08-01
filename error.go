@@ -15,9 +15,10 @@ var errRegexp = map[error]*regexp.Regexp{
 	ErrNoVolumesMounted:              regexp.MustCompile(`(?m)Error: (?P<msg>No volumes mounted)\.`),
 	ErrCommandNotFound:               regexp.MustCompile(`(?m)(?P<msg>.*: command not found)`),
 	ErrOperationFailed:               regexp.MustCompile(`(?m)Error: (?P<msg>Operation failed) due to one or more of the following:`),
-	ErrMountPointDoesNotExist:        regexp.MustCompile(`(?m)Error: (?P<msg>.*: mount point does not exist.)`),
-	ErrMountPointIsNotADirectory:     regexp.MustCompile(`(?m)Error: (?P<msg>.*: mount point is not a directory.)`),
-	ErrMountPointIsAlreadyInUse:      regexp.MustCompile(`(?m)Error: (?P<msg>Mount point is already in use)\.`),
+	ErrMountPointDoesNotExist:        regexp.MustCompile(`(?m)Error: mount: (?P<msg>.*: mount point does not exist)`),
+	ErrMountPointIsNotADirectory:     regexp.MustCompile(`(?m)Error: mount: (?P<msg>.*: mount point is not a directory)`),
+	ErrMountPointIsAlreadyInUse:      regexp.MustCompile(`(?m)Error: (?P<msg>Mount point is already in use)`),
+	ErrVolumeAlreadyMounted:          regexp.MustCompile(`(?m)Error: (?P<msg>The volume you are trying to mount is already mounted)`),
 }
 
 type Error struct {

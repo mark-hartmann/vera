@@ -1,8 +1,9 @@
 package vera
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestErrorIs(t *testing.T) {
@@ -165,4 +166,36 @@ func TestErrOperationFailed(t *testing.T) {
 	assert.ErrorIs(t, err, ErrOperationFailed)
 	assert.Equal(t, "operation failed", err.Error())
 	assert.Equal(t, ErrOperationFailed.Error(), err.Unwrap().Error())
+}
+
+func TestErrMountPointDoesNotExist(t *testing.T) {
+	err := parseError("Error: mount: /my-non-existing/mountpoint: mount point does not exist.")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrMountPointDoesNotExist)
+	assert.Equal(t, "/my-non-existing/mountpoint: mount point does not exist", err.Error())
+	assert.Equal(t, ErrMountPointDoesNotExist.Error(), err.Unwrap().Error())
+}
+
+func TestErrMountPointIsNotADirectory(t *testing.T) {
+	err := parseError("Error: mount: /my-file-to-mount: mount point is not a directory.")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrMountPointIsNotADirectory)
+	assert.Equal(t, "/my-file-to-mount: mount point is not a directory", err.Error())
+	assert.Equal(t, ErrMountPointIsNotADirectory.Error(), err.Unwrap().Error())
+}
+
+func TestErrMountPointIsAlreadyInUse(t *testing.T) {
+	err := parseError("Error: Mount point is already in use.")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrMountPointIsAlreadyInUse)
+	assert.Equal(t, "mount point is already in use", err.Error())
+	assert.Equal(t, ErrMountPointIsAlreadyInUse.Error(), err.Unwrap().Error())
+}
+
+func TestErrVolumeAlreadyMounted(t *testing.T) {
+	err := parseError("Error: The volume you are trying to mount is already mounted.")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrVolumeAlreadyMounted)
+	assert.Equal(t, "The volume you are trying to mount is already mounted", err.Error())
+	assert.Equal(t, ErrVolumeAlreadyMounted.Error(), err.Unwrap().Error())
 }

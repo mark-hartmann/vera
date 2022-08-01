@@ -56,3 +56,6 @@ var ErrMountPointIsNotADirectory = errors.New("mount point is not a directory")
 
 // ErrMountPointIsAlreadyInUse is returned when the mount point is already mounted by another volume
 var ErrMountPointIsAlreadyInUse = errors.New("mount point is already in use")
+
+// ErrVolumeAlreadyMounted is returned when the volume is already mounted
+var ErrVolumeAlreadyMounted = errors.New("volume already mounted")
