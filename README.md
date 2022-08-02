@@ -99,9 +99,7 @@ func mountNoFs() {
 ```
 
 ### Running Unit Tests
-For the tests to work properly:
-1. a `mount` directory must be created in the `testdata` directory to be used as a mount point.
-2. a `testmountpointfile` must be creaed in the `testdata` directory
+For the tests to work properly a `mount` directory must be created in the `testdata` directory to be used as a mount point.
 
 ---
 #### Notes
