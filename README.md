@@ -3,7 +3,7 @@
 This package relies on the exported `ExecCommand` function and `Param` structs which are passed. Internally, the corresponding 
 VeraCrypt command is assembled and then executed.  
 
-`vera` provides some predefined functions that try to simplify common commands, such as `List()`, `Mount()` and 
+`vera` provides some predefined functions that try to simplify common commands, such as `List()`, `MountSlot()` and 
 `DismountSlot()`. For a complete list of all exported functions, see the list below:
 
 * List
@@ -13,7 +13,8 @@ VeraCrypt command is assembled and then executed.
 * PropertiesSlot
 * PropertiesVolume
 * Installed
-* Mount
+* MountPath
+* MountSlot
 
 Each of the above uses the `ExecCommand`, so the user may choose to implement some of these functions by 
 themselves. However, this can quickly become a mess: 
@@ -31,7 +32,7 @@ mounts, err := vera.List() // the stdout buffer is already parsed and "mounts" c
 
 ### MountProperties
 
-The MountProperties struct is returned when calling `List`, `PropertiesSlot`, `PropertiesVolume` and `Mount`. It 
+The MountProperties struct is returned when calling `List`, `PropertiesSlot`, `PropertiesVolume`, `MountPath`, and `MountSlot`. It 
 provides some details about the mounted volume. The structure is as follows:
 
 ```go
@@ -88,15 +89,17 @@ _, err := vera.ExecCommand(tc, volume, pwd)
 Depending on the application requirements, it may be helpful to set up frequently used parameters as variables:
 ```go
 var NoFileSystem := vera.Param{Name: "filesystem", Value: "none"}
-var DefaultPassword := vera.Param{Name: "p", Value: "<your password>"} // please don't do this
 
 func mountNoFs() {
-    _, err := vera.Mount("./container.vc", 1, NoFileSystem, DefaultPassword)
+    _, err := vera.MountSlot("./container.vc", 1, "<password>", NoFileSystem)
     if err != nil { 
         // do something
     }
 }
 ```
+
+### Running Unit Tests
+For the tests to work properly a `mount` directory must be created in the `testdata` directory to be used as a mount point.
 
 ---
 #### Notes
