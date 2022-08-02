@@ -94,7 +94,7 @@ func (suite *MountTestSuite) TestPathVolumeMountpointInUse() {
 	suite.NotEqual(MountProperties{}, props)
 	suite.Equal(wd+"/testdata/mount", props.MountPoint)
 
-	props, err = MountPath("./testdata/basic2.vc", "./testdata/mount", "123456789")
+	props, err = MountPath("./testdata/basic-complex-pw.vc", "./testdata/mount", `s8&"f^T$r'`)
 	suite.Error(err)
 	suite.ErrorIs(err, ErrMountPointIsAlreadyInUse)
 	suite.Equal(MountProperties{}, props)
