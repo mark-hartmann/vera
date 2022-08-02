@@ -59,3 +59,7 @@ var ErrMountPointIsAlreadyInUse = errors.New("mount point is already in use")
 
 // ErrVolumeAlreadyMounted is returned when the volume is already mounted
 var ErrVolumeAlreadyMounted = errors.New("volume already mounted")
+
+// ErrPathAlreadyExists gets returned when creating a volume and the path for the volume already exists
+// this is not a Veracrypt erorr
+var ErrVolumePathAlreadyExists = errors.New("the path for creating the volume already exists")
