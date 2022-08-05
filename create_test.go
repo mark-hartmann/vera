@@ -31,7 +31,7 @@ func (suite *CreateTestSuite) AfterTest(_, _ string) {
 	}
 }
 
-func (suite CreateTestSuite) TestCreate() {
+func (suite *CreateTestSuite) TestCreate() {
 	err := Create(
 		volumePath,
 		"aes",
@@ -44,13 +44,13 @@ func (suite CreateTestSuite) TestCreate() {
 	suite.NoError(err)
 }
 
-func (suite CreateTestSuite) TestCreateExistingVolume() {
+func (suite *CreateTestSuite) TestCreateExistingVolume() {
 	err := Create(
 		volumePath,
 		"aes",
 		"sha512",
 		"ext4",
-		"10m",
+		"-32gh",
 		"123456789",
 	)
 
@@ -63,8 +63,16 @@ func (suite CreateTestSuite) TestCreateExistingVolume() {
 		"123456789",
 	)
 
-	suite.NoError(err)
-	suite.ErrorIs(err2, ErrVolumePathAlreadyExists)
+	err3 := Create(
+		volumePath,
+		"aes",
+		"sha512",
+		"ext4",
+		"10m",
+		"123456789",
+	)
 
-	suite.NoError(err)
+	suite.ErrorIs(err, ErrParameterIncorrect)
+	suite.NoError(err2)
+	suite.ErrorIs(err3, ErrVolumePathAlreadyExists)
 }

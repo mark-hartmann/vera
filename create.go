@@ -11,7 +11,7 @@ func Create(volumePath string, cipher string, hash string, filesystem string, si
 		return ErrVolumePathAlreadyExists
 	}
 
-	//Create a separate slice to make sure create is the first opt
+	// Create a separate slice to make sure create is the first opt
 	var createOpts []Param
 	createOpts = append(
 		createOpts,
@@ -24,12 +24,6 @@ func Create(volumePath string, cipher string, hash string, filesystem string, si
 		Param{Name: "stdin", IsFlag: true},
 	)
 
-	opts = append(createOpts, opts...)
-
-	_, err := ExecCommandWithStdin(password, opts...)
-
-	if err != nil {
-		return err
-	}
-	return nil
+	_, err := ExecCommandWithStdin(password, append(createOpts, opts...)...)
+	return err
 }
