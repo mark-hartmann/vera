@@ -1,11 +1,12 @@
 ## Overview
 
-This package relies on the exported `ExecCommand` function and `Param` structs which are passed. Internally, the corresponding 
-VeraCrypt command is assembled and then executed.  
+This package relies on the exported `ExecCommand`/`ExecCommandWithStdin` functions and `Param` structs which are passed. Internally, the corresponding
+VeraCrypt command is assembled and then executed.
 
-`vera` provides some predefined functions that try to simplify common commands, such as `List()`, `MountSlot()` and 
+`vera` provides some predefined functions that try to simplify common commands, such as `List()`, `MountSlot()` and
 `DismountSlot()`. For a complete list of all exported functions, see the list below:
 
+#### Common Functions
 * List
 * DismountAll
 * DismountSlot
@@ -17,8 +18,12 @@ VeraCrypt command is assembled and then executed.
 * MountSlot
 * Create
 
-Each of the above uses the `ExecCommand`, so the user may choose to implement some of these functions by 
-themselves. However, this can quickly become a mess: 
+#### Core Functions
+* ExecCommand
+* ExecCommandWithStdin
+
+Each of the above uses either `ExecCommand` or `ExecCommandWithStdin`, so the user may choose to implement some of these functions by
+themselves. However, this can quickly become a mess:
 ```go
 stdout, err := vera.ExecCommand(vera.Param{Name: "list", IsFlag: true})
 
@@ -33,7 +38,7 @@ mounts, err := vera.List() // the stdout buffer is already parsed and "mounts" c
 
 ### MountProperties
 
-The MountProperties struct is returned when calling `List`, `PropertiesSlot`, `PropertiesVolume`, `MountPath`, and `MountSlot`. It 
+The MountProperties struct is returned when calling `List`, `PropertiesSlot`, `PropertiesVolume`, `MountPath`, and `MountSlot`. It
 provides some details about the mounted volume. The structure is as follows:
 
 ```go
@@ -46,7 +51,7 @@ type MountProperties struct {
 
 ###### Slot
 
-VeraCrypt uses "slots" to mount volumes to. These slots are limited and VeraCrypt only allow up to 64 mounted volumes. 
+VeraCrypt uses "slots" to mount volumes to. These slots are limited and VeraCrypt only allow up to 64 mounted volumes.
 The slots range from **1** to **64**
 
 ###### Volume
@@ -55,8 +60,8 @@ Volume contains the absolute path of the mounted volume, even if a relative path
 
 ###### MountPoint
 
-The mount directory of this volume. If not provided by the user, VeraCrypt / the operating system will choose one. On 
-Linux Mint for example, the default mount directories are named "veracrypt" + the used slot, e.g. `/media/veracrypt1` or 
+The mount directory of this volume. If not provided by the user, VeraCrypt / the operating system will choose one. On
+Linux Mint for example, the default mount directories are named "veracrypt" + the used slot, e.g. `/media/veracrypt1` or
 `/media/veracrypt3`
 
 ---
@@ -77,14 +82,11 @@ type Param struct {
 // create a flag
 tc := vera.Param{Name: "truecrypt", IsFlag: true} // --truecrypt
 
-// create a normal parameter
-pwd := vera.Param{Name: "password", Value: "<your password>"} // --password="<your password>"
-
 // create an argument
 volume := vera.Param{Value: "./stuff.vc"} // "./stuff.vc"
 
 // mount volume
-_, err := vera.ExecCommand(tc, volume, pwd)
+_, err := vera.ExecCommandWithStdin("<your password>", tc, volume)
 ```
 
 Depending on the application requirements, it may be helpful to set up frequently used parameters as variables:
@@ -92,10 +94,10 @@ Depending on the application requirements, it may be helpful to set up frequentl
 var NoFileSystem := vera.Param{Name: "filesystem", Value: "none"}
 
 func mountNoFs() {
-    _, err := vera.MountSlot("./container.vc", 1, "<password>", NoFileSystem)
-    if err != nil { 
-        // do something
-    }
+_, err := vera.MountSlot("./container.vc", 1, "<password>", NoFileSystem)
+if err != nil {
+// do something
+}
 }
 ```
 
