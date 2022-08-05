@@ -15,6 +15,7 @@ VeraCrypt command is assembled and then executed.
 * Installed
 * MountPath
 * MountSlot
+* Create
 
 Each of the above uses the `ExecCommand`, so the user may choose to implement some of these functions by 
 themselves. However, this can quickly become a mess: 
